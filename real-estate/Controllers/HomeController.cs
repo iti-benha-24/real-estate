@@ -11,7 +11,7 @@ namespace real_estate.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            Console.WriteLine("test2");
+            Console.WriteLine("test2222222");
         }
 
         public IActionResult Index()
