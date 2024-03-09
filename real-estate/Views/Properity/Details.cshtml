@@ -1,0 +1,25 @@
+﻿
+@model Property
+
+<h1>Details Property</h1>
+
+<div class="card col-3 m-4" style="width: 40rem;">
+    <img src="@Model.PropertyImg" class="card-img-top" alt="..." />
+    <div class="card-body">
+        <h5 class="card-title">Location : @Model.Address</h5>
+        <p class="card-text">Employee : @Model.employee.Name</p>
+        <p class="card-text">City : @Model.city.Name</p> 
+        <p class="card-text">Price : @Model.Price</p>
+        <p class="card-text">Features : @Model.Features</p>
+        <p class="card-text">NumBedrooms : @Model.NumBedrooms</p>
+        <p class="card-text">NumBathrooms : @Model.NumBathrooms</p>
+        <p class="card-text">PropertyStatus :  @Model.propertyStatus.status</p>
+        <p class="card-text">Type : @Model.propertyType.type</p> 
+    </div>
+</div>
+
+
+
+
+
+

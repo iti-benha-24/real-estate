@@ -1,0 +1,124 @@
+﻿@model Contract
+
+@{
+    SelectList Propitems = new SelectList(ViewBag.Properties, "Id", "Address");
+    SelectList Empitems = new SelectList(ViewBag.Employees, "Id", "Name");
+    SelectList Clientitems = new SelectList(ViewBag.Clients, "Id", "Name");
+}
+
+   @*   <p>@Model.property.Address</p> 
+    <p>@Model.employee.Name</p>
+    <p>@Model.client.Name</p> *@
+<form method="post">
+    @if(Model == null)
+    {
+        <div>
+            <label asp-for="propertyId">Property Name</label>
+            <select asp-for="propertyId" class="form-control" asp-items="Propitems">
+                <option value="0">-- select property --</option>
+            </select>
+            <span asp-validation-for="propertyId" class="text-danger"></span>
+        </div>
+
+        <div class="mt-3">
+            <label asp-for="employeeId">Employee Name</label>
+            <select asp-for="employeeId" class="form-control" asp-items="Empitems" >
+                <option value="0">-- select employee --</option>
+
+            </select>
+            <span asp-validation-for="employeeId" class="text-danger"></span>
+        </div>
+        <div class="mt-3">
+            <label asp-for="clientId">Client Name</label>
+            <select asp-for="clientId" class="form-control" asp-items="Clientitems">
+                <option value="0">-- select client --</option>
+
+            </select>
+            <span asp-validation-for="clientId" class="text-danger"></span>
+        </div>
+    }
+    else
+    {
+        
+    <div>
+        <label asp-for="propertyId">Property Name</label>
+        <select asp-for="propertyId" class="form-control" asp-items="Propitems" disabled>
+                <option value="propertyId">@Model?.property.Address</option>
+       </select>
+       <span asp-validation-for="propertyId" class="text-danger"></span>
+    </div> 
+
+     <div class="mt-3">
+        <label asp-for="employeeId">Employee Name</label>
+        <select asp-for="employeeId" class="form-control" asp-items="Empitems" disabled>
+            <option value="employeeId"><p>@Model?.employee.Name</p></option>
+        </select>
+        <span asp-validation-for="employeeId" class="text-danger"></span>
+    </div> 
+     <div class="mt-3">
+        <label asp-for="clientId">Client Name</label>
+        <select asp-for="clientId" class="form-control" asp-items="Clientitems" disabled>
+            <option value="clientId">@Model?.client.Name</option>
+       </select>
+        <span asp-validation-for="clientId" class="text-danger"></span>
+    </div> 
+
+    }
+    <div class="mt-3">
+        <label asp-for="StartDate"></label>
+        <input type="text" id="startDate" asp-for="StartDate" class="form-control datetimepicker" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+
+    </div>
+    <div class="mt-3">
+        <label asp-for="EndDate"></label>
+        <input type="text" id="endDate" asp-for="EndDate" class="form-control datetimepicker" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+
+    </div>
+    <div class="mt-3 mb-5">
+        @if(Model == null)
+        {
+            <input class="btn btn-success" type="submit" value="Create" />
+            <a  class="btn btn-primary" asp-action="Index">Back To List</a>  
+        }
+        else
+        {
+            <input class="btn btn-success" type="submit" asp-action="Edit" value="Edit" />
+            <a class="btn btn-primary" asp-action="Index">Back To List</a>
+        }
+    </div>
+  
+</form>
+@section Scripts {
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+    <script>
+        $(function () {
+            $("#endDate").datetimepicker({
+                dateFormat: 'yy-mm-dd', // Date format
+                timeFormat: 'HH:mm:ss', // Time format
+                showSecond: true, // Show seconds
+                showMillisec: false, // Hide milliseconds
+                showTimezone: false, // Hide timezone
+                changeYear: true, // Allow changing the year
+                changeMonth: true, // Allow changing the month
+                minDate: 0 // Minimum date (e.g., today)
+            });
+        });
+        $(function () {
+            $("#startDate").datetimepicker({
+                dateFormat: 'yy-mm-dd', // Date format
+                timeFormat: 'HH:mm:ss', // Time format
+                showSecond: true, // Show seconds
+                showMillisec: false, // Hide milliseconds
+                showTimezone: false, // Hide timezone
+                changeYear: true, // Allow changing the year
+                changeMonth: true, // Allow changing the month
+                minDate: 0 // Minimum date (e.g., today)
+            });
+        });
+    </script>
+}
