@@ -24,9 +24,7 @@
         public City city { get; set; }
         public property_status propertyStatus { get; set; }
         public property_type propertyType { get; set; }
-
         public Contract contract { get; set; }
-        
         public Employee employee { get; set; }  
 
 
