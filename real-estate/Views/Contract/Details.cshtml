@@ -1,0 +1,14 @@
+﻿@model Contract
+
+<div class="card" style="width: 19rem;">
+    <div class="card-body">
+        <h3 class="card-title">Property Address: @Model.property.Address</h3>
+        <h3 class="card-title">city: @Model.property.city.Name</h3>
+        <h6 class="card-subtitle mb-2 text-muted">Employee Name: @Model.employee.Name</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Client Name : @Model.client.Name </h6>
+        <p class="card-subtitle mb-2 text-muted">Start Date : @Model.StartDate</p>
+        <p class="card-subtitle mb-2 text-muted">End Date : @Model.EndDate</p>
+        <a  class="btn btn-primary" asp-action="Index">Back To List</a>
+      
+    </div>
+</div>

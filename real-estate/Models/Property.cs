@@ -5,8 +5,7 @@
         public int Id { get; set; }
         public string PropertyImg { get; set; }
         public string Address { get; set; }
-         public decimal Price { get; set; } 
-
+         public decimal Price { get; set; }
         public int cityId { get; set; }
         public int PropertyTypeId { get; set; }
         public int PropertySize { get; set; }
