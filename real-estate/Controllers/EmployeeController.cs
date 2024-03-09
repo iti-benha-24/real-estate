@@ -4,10 +4,10 @@ using real_estate.Models;
 
 namespace real_estate.Controllers
 {
-    public class Employee : Controller
+    public class EmployeeController : Controller
     {
         real_estateDB db;
-        public Employee()
+        public EmployeeController()
         {
             db = new real_estateDB();
         }
@@ -32,15 +32,24 @@ namespace real_estate.Controllers
 
             return View(employee);
         }
+        public IActionResult Add()
+        {
+            return View();
 
-        //public IActionResult Add(Employee employee)
-        //{
-        //    if(ModelState.IsValid)
-        //    db.Employees.Add(employee);
-        //    db.SaveChanges();
+        }
 
-        //    return View();
+        [HttpPost]
+        public IActionResult Add(Employee emp)
+        {
+            if (emp!= null)
+            {
+                db.Employees.Add(emp);
+                db.SaveChanges();
 
-        //}
+                return RedirectToAction("Index");
+            }
+            return View();
+
+        }
     }
 }
