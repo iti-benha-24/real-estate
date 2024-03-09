@@ -1,0 +1,60 @@
+﻿@model List<Employee>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h1>Employee List</h1>
+            <table class="table table-hover mt-4">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model)
+                    {
+                        <tr>
+                            <td><a class="text-primary" asp-action="Details" asp-route-id="@employee.Id">@employee.Name</a></td>
+                            <td>
+                                <a href="#" class="edit-btn" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="#" class="delete-btn" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-primary {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+        .text-primary:hover {
+            text-decoration: underline;
+        }
+
+    .edit-btn,
+    .delete-btn {
+        color: #555;
+        font-size: 18px;
+        margin-right: 10px;
+        transition: color 0.3s; /* Add transition for smoother hover effect */
+    }
+
+        .edit-btn:hover {
+            color: #007bff;
+        }
+
+        .delete-btn:hover {
+            color: red;
+        }
+</style>
