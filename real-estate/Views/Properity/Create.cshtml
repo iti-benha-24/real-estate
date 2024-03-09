@@ -1,0 +1,122 @@
+﻿@using real_estate.Models
+@model Property
+<h1>Create Property</h1>
+
+<form method="post">
+    @* Employee *@
+    <div class="form-group">
+        <label asp-for="EmployeeId">Employee:</label>
+        <select asp-for="EmployeeId" class="form-control">
+            <option value="">Select Employee</option>
+            @foreach (var employee in ViewData["Employees"] as List<SelectListItem>)
+            {
+                <option value="@employee.Value">@employee.Text</option>
+            }
+        </select>
+        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+    </div>
+
+    @* City *@
+    <div class="form-group">
+        <label asp-for="cityId">City:</label>
+        <select asp-for="cityId" class="form-control">
+            <option value="">Select a city</option>
+            @foreach (var city in ViewData["Cities"] as IEnumerable<SelectListItem>)
+            {
+                <option value="@city.Value">@city.Text</option>
+            }
+        </select>
+        <span asp-validation-for="cityId" class="text-danger"></span>
+    </div>
+
+    @* PImage *@
+    <div class="form-group">
+        <label asp-for="PropertyImg">Image Url:</label>
+        <input asp-for="PropertyImg" class="form-control" value="@Model?.PropertyImg" />
+        <span asp-validation-for="PropertyImg" class="text-danger"></span>
+    </div>
+
+    @* Location *@
+    <div class="form-group">
+        <label asp-for="Address">Location:</label>
+        <input asp-for="Address" class="form-control" value="@Model?.Address" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    @* Features *@
+    <div class="form-group">
+        <label asp-for="Features">Features:</label>
+        <input asp-for="Features" class="form-control" value="@Model?.Features" />
+        <span asp-validation-for="Features" class="text-danger"></span>
+    </div>
+
+    @* Price *@
+    <div class="form-group">
+        <label asp-for="Price">Price:</label>
+        <input asp-for="Price" class="form-control" value="@Model?.Price" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    @* Status *@
+    <div class="form-group">
+        <label asp-for="PropertyStatusId">Property Status:</label>
+        <select asp-for="PropertyStatusId" class="form-control">
+            <option value="">Select a Status</option>
+            @foreach (var Status in ViewData["Status"] as List<SelectListItem>)
+            {
+                <option value="@Status.Value">@Status.Text</option>
+            }
+        </select>
+        <span asp-validation-for="PropertyStatusId" class="text-danger"></span>
+    </div>
+
+    @* Type *@
+    <div class="form-group">
+        <label asp-for="PropertyTypeId">Property Type:</label>
+        <select asp-for="PropertyTypeId" class="form-control">
+            <option value="">Select a Status</option>
+            @foreach (var Type in ViewData["Types"] as List<SelectListItem>)
+            {
+                <option value="@Type.Value">@Type.Text</option>
+            }
+        </select>
+        <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+    </div>
+
+    @* Size *@
+    <div class="form-group">
+        <label asp-for="PropertySize">PropertySize by Metre:</label>
+        <input asp-for="PropertySize" class="form-control" value="@Model?.PropertySize"></input>
+        <span asp-validation-for="PropertySize" class="text-danger"></span>
+    </div>
+
+    @* NumBedrooms *@
+    <div class="form-group">
+        <label asp-for="NumBedrooms">NumBedrooms:</label>
+        <input asp-for="NumBedrooms" class="form-control" value="@Model?.NumBedrooms"></input>
+        <span asp-validation-for="NumBedrooms" class="text-danger"></span>
+    </div>
+
+    @* NumBathrooms *@
+    <div class="form-group">
+        <label asp-for="NumBathrooms">NumBathrooms:</label>
+        <input asp-for="NumBathrooms" class="form-control" value="@Model?.NumBathrooms"></input>
+        <span asp-validation-for="NumBathrooms" class="text-danger"></span>
+    </div>
+
+
+    @if (Model == null)
+    {
+        <button type="submit" class="btn btn-primary">Create</button>
+    }
+    else
+    {
+        <button type="submit"  class="btn btn-primary">Edit</button>
+    }
+</form>
+
+
+
+
+
+
