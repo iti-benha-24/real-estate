@@ -41,7 +41,7 @@ namespace real_estate.Controllers
         [HttpPost]
         public IActionResult Add(Employee emp)
         {
-            if (emp!= null)
+            if (emp != null)
             {
                 db.Employees.Add(emp);
                 db.SaveChanges();
@@ -50,6 +50,40 @@ namespace real_estate.Controllers
             }
             return View();
 
+        }
+        public IActionResult Edit(int id)
+        {
+            var employee = db.Employees.SingleOrDefault(emp => emp.Id == id);
+            /*Include(emp => emp.properties)
+                .ThenInclude(p => p.city)
+            .Include(emp => emp.properties)
+                .ThenInclude(p => p.propertyStatus)
+            .Include(emp => emp.properties)
+                .ThenInclude(p => p.propertyType)
+            .Include(emp => emp.properties)
+                .ThenInclude(p => p.contract)*/
+
+
+            return View(employee);
+
+        }
+        [HttpPost]
+        public IActionResult Edit(int id, Employee emp)
+        {
+
+            db.Employees.Update(emp);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+
+            var emp = db.Employees.FirstOrDefault(x => x.Id == id);
+
+            db.Employees.Remove(emp);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

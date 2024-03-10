@@ -4,6 +4,9 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <h1 class="text-center">Employee List</h1>
+            <div class="text-center m-2">
+            <a class="btn btn-primary" asp-action="Add" asp-controller="Employee">Add Employee </a>
+            </div>
             <table class="table table-hover mt-4">
                 <thead class="thead-dark">
                     <tr>
@@ -17,10 +20,10 @@
                         <tr>
                             <td><a class="text-primary" asp-action="Details" asp-route-id="@employee.Id">@employee.Name</a></td>
                             <td>
-                                <a href="#" class="edit-btn" title="Edit">
+                                <a asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-dark">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="#" class="delete-btn" title="Delete">
+                                <a asp-action="Delete" asp-route-id="@employee.Id" class="btn btn-danger">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>
@@ -28,9 +31,6 @@
                     }
                 </tbody>
             </table>
-            <div class="text-center">
-            <a class="btn btn-success" asp-action="Add" asp-controller="Employee">Add Employee </a>
-            </div>
         </div>
     </div>
 </div>
@@ -53,7 +53,7 @@
         color: #555;
         font-size: 18px;
         margin-right: 10px;
-        transition: color 0.3s; /* Add transition for smoother hover effect */
+        transition: color 0.3s; 
     }
 
         .edit-btn:hover {

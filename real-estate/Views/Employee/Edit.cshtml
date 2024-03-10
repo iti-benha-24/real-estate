@@ -1,0 +1,19 @@
+﻿@model Employee
+
+<div style="width:500px" class="m-auto">
+    <form method="post">
+
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" value="@Model?.Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+
+        <div>
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" class="form-control" value="@Model?.Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="text-center">
+            <input class="btn btn-success w-25 m-3" type="submit" value="Add" />
+        </div>
+    </form>
+</div>
