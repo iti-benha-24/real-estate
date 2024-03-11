@@ -14,7 +14,7 @@ namespace real_estate.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=real-estate;Trusted_Connection=True;TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-QLDAB1U\\SQLEXPRESS;Database=real-estate;Trusted_Connection=True;TrustServerCertificate=true;");
 
         }
 
