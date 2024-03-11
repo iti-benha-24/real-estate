@@ -39,11 +39,12 @@ namespace real_estate.Models
                 .WithOne(C => C.property)
                 .HasForeignKey<Contract>(C => C.propertyId);
 
-            //City
-            modelBuilder.Entity<City>()
-                .HasMany(C => C.properties)
-                .WithOne(prop => prop.city)
-                .HasForeignKey(prop => prop.cityId);
+            modelBuilder.Entity<Property>()
+                .HasOne(prop => prop.employee)
+                .WithMany(emp => emp.properties)
+                .HasForeignKey(prop => prop.EmployeeId);
+
+            
 
 
             //Client
@@ -65,6 +66,12 @@ namespace real_estate.Models
             });
 
 
+
+            //City
+            modelBuilder.Entity<City>()
+                .HasMany(C => C.properties)
+                .WithOne(prop => prop.city)
+                .HasForeignKey(prop => prop.cityId);
 
 
         }

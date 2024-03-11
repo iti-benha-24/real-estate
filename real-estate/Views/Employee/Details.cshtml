@@ -1,0 +1,80 @@
+﻿@model Employee
+<p>
+@* <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h1 class="text-center mb-4">@Model.Name</h1>
+            <div class="row">
+                @foreach (var property in Model.properties)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <img src="@property.PropertyImg"  width="200px"/>
+                                <h5 class="card-title">@property.Address</h5>
+                                <p class="card-text"><strong>City:</strong> @property.city.Name</p>
+                                <p class="card-text"><strong>Size:</strong> @property.PropertySize</p>
+                                <p class="card-text"><strong>Type:</strong> @property.propertyType.type</p>
+                                <p class="card-text"><strong>Status:</strong> @property.propertyStatus.status</p>
+                                <p class="card-text"><strong>Bedrooms:</strong> @property.NumBedrooms</p>
+                                <p class="card-text"><strong>Bathrooms:</strong> @property.NumBathrooms</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <a asp-action="Index" class="btn btn-secondary mt-2">Back to Employees</a>
+        </div>
+    </div>
+    </div> *@
+</p>
+
+    <h1 class="text-center mb-4">@Model?.Name</h1>
+    <div class="row gap-0">
+        @foreach (var property in Model.properties)
+        {
+            <div class="col-lg-4 mb-3">
+                <div class="card">
+                    <img src="@property.PropertyImg" class="card-img-top" alt="Property Image" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>Location : </strong>@property.Address</h5>
+                        <p class="card-text"><strong>City:</strong> @property.city.Name</p>
+                        <p class="card-text"><strong>Size:</strong> @property.PropertySize</p>
+                        <p class="card-text"><strong>Type:</strong> @property.propertyType.type</p>
+                        <p class="card-text"><strong>Status:</strong> @property.propertyStatus.status</p>
+                        <p class="card-text"><strong>Bedrooms:</strong> @property.NumBedrooms</p>
+                        <p class="card-text"><strong>Bathrooms:</strong> @property.NumBathrooms</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Back to Employees</a>
+
+<style>
+    .card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        font-family: Arial, sans-serif; /* Change font family as needed */
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        font-size: 18px; /* Adjust font size as needed */
+        font-weight: bold; /* Adjust font weight as needed */
+        color: #333; /* Adjust font color as needed */
+    }
+
+    .card-text {
+        font-size: 14px; /* Adjust font size as needed */
+        color: #666; /* Adjust font color as needed */
+    }
+
+    .btn {
+        font-size: 14px; /* Adjust button font size as needed */
+    }
+</style>
+
