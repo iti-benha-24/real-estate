@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using real_estate.Models;
 
 namespace real_estate.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class EmployeeController : Controller
     {
         real_estateDB db;
-        public EmployeeController()
+        public EmployeeController(real_estateDB _db)
         {
-            db = new real_estateDB();
+            db = _db;
         }
         public IActionResult Index()
         {

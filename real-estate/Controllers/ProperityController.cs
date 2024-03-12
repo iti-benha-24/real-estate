@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using real_estate.Models;
@@ -6,23 +7,26 @@ using real_estate.Repos;
 
 namespace real_estate.Controllers
 {
+    
     public class ProperityController : Controller
     {
         PropertyRepo propertyRepo;
-        public ProperityController()
+        public ProperityController(PropertyRepo _propertyRepo)
         {
-           propertyRepo = new PropertyRepo();
+           propertyRepo= _propertyRepo;
         }
         public IActionResult Index()
         {
             return View(propertyRepo.GetAll());
         }
+
+        [Authorize(Roles ="Employee,Admin")]       
         public IActionResult Create()
         {
             ALLViewData();
             return View();
         }
-
+        [Authorize(Roles = "Employee,Admin")]
         [HttpPost]
         public IActionResult Create(Property property)
         {
@@ -33,47 +37,29 @@ namespace real_estate.Controllers
 
             return RedirectToAction("Index");
         }
+
         public IActionResult Details(int id)
         {
             ALLViewData();
             return View(propertyRepo.GetDetails(id));
         }
+        [Authorize(Roles = "Employee,Admin")]
         public IActionResult Edit(int id)
         {
             ALLViewData();
             return View("Create", propertyRepo.GetDetails(id));
         }
-
+        [Authorize(Roles = "Employee,Admin")]
         [HttpPost]
         public IActionResult Edit(int id, Property property)
         {
             ALLViewData();
-            /*            var prop = CON.Properties
-                            .Include(p => p.employee)
-                            .Include(p => p.city)
-                            .Include(p => p.propertyStatus)
-                            .Include(p => p.propertyType)
-                            .SingleOrDefault(p => p.Id == id);
-            prop.Id = property.Id;
-            prop.PropertyImg = property.PropertyImg;
-            prop.Address = property.Address;
-            prop.Price = property.Price;
-            prop.city = property.city;
-            prop.cityId = property.cityId;
-            prop.PropertyTypeId = property.PropertyTypeId;
-            prop.PropertySize = property.PropertySize;
-            prop.NumBedrooms = property.NumBedrooms;
-            prop.NumBathrooms = property.NumBathrooms;
-            prop.Features = property.Features;
-            prop.EmployeeId = property.EmployeeId;
-            prop.PropertyStatusId = property.PropertyStatusId;
-            prop.ContractId= property.ContractId;*/
-
             propertyRepo.Update(property);
             propertyRepo.SaveChanges();
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Employee,Admin")]
         public IActionResult Delete(int id)
         {
             Property property = propertyRepo.GetById(id);

@@ -1,33 +1,46 @@
 ﻿@model List<Property>
-<p>
-@* <div class="container row ">
-@foreach (var Prop in Model)
-{
-    <div class="card col-3 m-4" style="width: 100px;">
-             <img src="@Prop.PropertyImg" class="card-img-top" alt="..." /> 
-        <div class="card-body">
-                <h5 class="card-title">Location : @Prop.Address</h5>
-                <p class="card-text">Price : @Prop.Price</p>
-                <p class="card-text">City : @Prop.city.Name</p>
-                <p class="card-text">Features : @Prop.Features</p>
-                <a class="mr-2 btn btn-primary" asp-action="Details" asp-route-id="@Prop.Id">Details</a>
-                <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Prop.Id">Edit</a>
-                @if (Prop.propertyStatus.status == "Available" || Prop.propertyStatus.status == "Under Contract")
-                {
-                    <a class="btn btn-dark" asp-action="Delete" asp-route-id="@Prop.Id">Delete</a>
-                }
-        </div>
-    </div>     
-}
-</div>
-<br><a class="btn btn-primary" style="text-align=center" asp-action="Create">Create New Property</a>
 
-    *@
-</p>
 <h1 style="text-align:center"> Our Property</h1>
+@if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+{
 <div class="text-center m-2">
     <br><a class="btn btn-primary" style="text-align=center" asp-action="Create">Create New Property</a>
 </div>
+}
+
+<div class="container">
+    <div class="row">
+        @foreach (var Prop in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@Prop.PropertyImg" class="card-img-top" alt="Property Image" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Location: @Prop.Address</h5>
+                        <p class="card-text">Price: @Prop.Price</p>
+                        <p class="card-text">City: @Prop.city.Name</p>
+                        <p class="card-text">Features: @Prop.Features</p>
+                        <div class="btn-group d-flex" role="group" aria-label="Property Actions">
+                            <a class="mr-2 btn btn-primary" asp-action="Details" asp-route-id="@Prop.Id">Details</a>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                            {
+                                <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Prop.Id">Edit</a>
+                                @if (Prop.propertyStatus.status == "Available" || Prop.propertyStatus.status == "Under Contract")
+                                {
+                                    <a class="btn btn-dark" asp-action="Delete" asp-route-id="@Prop.Id">Delete</a>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
 
 <style>
     body {
@@ -59,33 +72,3 @@
         font-size: 14px; 
     }
 </style>
-
-<div class="container">
-    <div class="row">
-        @foreach (var Prop in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="@Prop.PropertyImg" class="card-img-top" alt="Property Image" style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Location: @Prop.Address</h5>
-                        <p class="card-text">Price: @Prop.Price</p>
-                        <p class="card-text">City: @Prop.city.Name</p>
-                        <p class="card-text">Features: @Prop.Features</p>
-                        <div class="btn-group d-flex" role="group" aria-label="Property Actions">
-                            <a class="mr-2 btn btn-primary" asp-action="Details" asp-route-id="@Prop.Id">Details</a>
-                            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Prop.Id">Edit</a>
-                            @if (Prop.propertyStatus.status == "Available" || Prop.propertyStatus.status == "Under Contract")
-                            {
-                                <a class="btn btn-dark" asp-action="Delete" asp-route-id="@Prop.Id">Delete</a>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-
-
-

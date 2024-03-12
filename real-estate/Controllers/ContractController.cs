@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using real_estate.Models;
 using real_estate.ViewModels;
@@ -7,12 +8,13 @@ using Contract = real_estate.Models.Contract;
 
 namespace real_estate.Controllers
 {
+    [Authorize(Roles ="Employee,Admin")]
     public class ContractController : Controller
     {
         real_estateDB db;
-        public ContractController()
+        public ContractController(real_estateDB _db)
         {
-            db = new real_estateDB();
+            db = _db;
         }
         public IActionResult Index()
         {

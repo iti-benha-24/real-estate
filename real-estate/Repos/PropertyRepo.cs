@@ -7,9 +7,9 @@ namespace real_estate.Repos
     public class PropertyRepo
     {
         real_estateDB CON;
-        public PropertyRepo()
+        public PropertyRepo(real_estateDB _con)
         {
-            CON = new real_estateDB();
+            CON = _con;
         }
         public List<Property> GetAll() 
         {

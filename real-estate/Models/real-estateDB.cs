@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using real_estate.ViewModels;
 
 namespace real_estate.Models
 {
-    public class real_estateDB : DbContext
+    public class real_estateDB : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Property> Properties { get;  set; }
         public DbSet<Contract> Contracts { get; set; }
@@ -12,15 +15,16 @@ namespace real_estate.Models
         public DbSet<property_type> Types { get; set; }
         public DbSet<City> Cities {  get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-QLDAB1U\\SQLEXPRESS;Database=real-estate;Trusted_Connection=True;TrustServerCertificate=true;");
+        public real_estateDB(DbContextOptions<real_estateDB> options):base(options)
+        { }
 
-        }
+        
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            base.OnModelCreating(modelBuilder);
             //Property
             modelBuilder.Entity<Property>()
                 .HasOne(prop => prop.city)
@@ -75,7 +79,7 @@ namespace real_estate.Models
 
 
         }
-
+       
 
     }
 }
