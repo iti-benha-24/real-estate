@@ -2,34 +2,27 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using real_estate.Models;
+using real_estate.Repos.EmployeeRepo;
 
 namespace real_estate.Controllers
 {
     [Authorize(Roles ="Admin")]
     public class EmployeeController : Controller
     {
-        real_estateDB db;
-        public EmployeeController(real_estateDB _db)
+        private readonly IEmployeeRepo employeeRepo;
+
+        public EmployeeController(IEmployeeRepo _employeeRepo)
         {
-            db = _db;
+            employeeRepo = _employeeRepo;
         }
         public IActionResult Index()
         {
-            var employee = db.Employees.ToList();
+            var employee = employeeRepo.GetAll();
             return View(employee);
         }
         public IActionResult Details(int id)
         {
-            var employee = db.Employees
-                        .Include(emp => emp.properties)
-                            .ThenInclude(p => p.city)
-                        .Include(emp => emp.properties)
-                            .ThenInclude(p => p.propertyStatus)
-                        .Include(emp => emp.properties)
-                            .ThenInclude(p => p.propertyType)
-                        .Include(emp => emp.properties)
-                            .ThenInclude(p => p.contract)
-                        .FirstOrDefault(emp => emp.Id == id);
+            var employee = employeeRepo.GetByIdWithDetails(id);
 
 
             return View(employee);
@@ -45,8 +38,8 @@ namespace real_estate.Controllers
         {
             if (emp != null)
             {
-                db.Employees.Add(emp);
-                db.SaveChanges();
+                employeeRepo.Add(emp);
+                employeeRepo.Save();
 
                 return RedirectToAction("Index");
             }
@@ -55,7 +48,7 @@ namespace real_estate.Controllers
         }
         public IActionResult Edit(int id)
         {
-            var employee = db.Employees.SingleOrDefault(emp => emp.Id == id);
+            var employee = employeeRepo.GetById(id);
             /*Include(emp => emp.properties)
                 .ThenInclude(p => p.city)
             .Include(emp => emp.properties)
@@ -73,18 +66,18 @@ namespace real_estate.Controllers
         public IActionResult Edit(int id, Employee emp)
         {
 
-            db.Employees.Update(emp);
-            db.SaveChanges();
+            employeeRepo.Edit(emp);
+            employeeRepo.Save();
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int id)
         {
 
-            var emp = db.Employees.FirstOrDefault(x => x.Id == id);
+            var emp = employeeRepo.GetById(id);
 
-            db.Employees.Remove(emp);
-            db.SaveChanges();
+            employeeRepo.Delete(emp);
+            employeeRepo.Save();
             return RedirectToAction("Index");
         }
     }

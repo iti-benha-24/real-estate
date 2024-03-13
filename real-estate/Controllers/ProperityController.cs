@@ -3,21 +3,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using real_estate.Models;
-using real_estate.Repos;
+using real_estate.Repos.PropertyRepo;
 
 namespace real_estate.Controllers
 {
-    
+
     public class ProperityController : Controller
     {
-        PropertyRepo propertyRepo;
-        public ProperityController(PropertyRepo _propertyRepo)
+        private readonly IPropertyRepo propertyRepo;
+
+        public ProperityController(IPropertyRepo _propertyRepo)
         {
-           propertyRepo= _propertyRepo;
+            propertyRepo = _propertyRepo;
         }
-        public IActionResult Index()
+        public IActionResult Index(int id=1)
         {
-            return View(propertyRepo.GetAll());
+                var pageNumber = id;
+                var pageSize = 3;
+                var totalProperties = propertyRepo.GetAll().Count();
+                var totalPages = (int)Math.Ceiling((double)totalProperties / pageSize);
+                var Queryresult = propertyRepo.GetAll();
+                var PageResult = Queryresult.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+                ViewData["totalPages"] = totalPages;
+                ViewData["pageNum"] = pageNumber;
+
+                return View(PageResult);
         }
 
         [Authorize(Roles ="Employee,Admin")]       

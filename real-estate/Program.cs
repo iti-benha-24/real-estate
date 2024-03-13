@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using real_estate.Models;
-using real_estate.Repos;
+using real_estate.Repos.ContractRepo;
+using real_estate.Repos.EmployeeRepo;
+using real_estate.Repos.PropertyRepo;
 namespace real_estate
 {
     public class Program
@@ -13,9 +15,12 @@ namespace real_estate
             builder.Services.AddDbContext<real_estateDB>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("constr")));
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<real_estateDB>();
-            builder.Services.AddScoped<PropertyRepo>();
+            builder.Services.AddScoped<IPropertyRepo,PropertyRepo>();
+            builder.Services.AddScoped<IContractRepo, ContractRepo>();
+            builder.Services.AddScoped<IEmployeeRepo, EmployeeRepo>();
+
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddNewtonsoftJson(x=>x.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             builder.Services.AddRazorPages();
          
             var app = builder.Build();

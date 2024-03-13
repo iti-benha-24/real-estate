@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using real_estate.Models;
+using real_estate.Repos.ContractRepo;
+using real_estate.Repos.EmployeeRepo;
+using real_estate.Repos.PropertyRepo;
 using real_estate.ViewModels;
 using System.Diagnostics.Contracts;
 using Contract = real_estate.Models.Contract;
@@ -11,23 +14,28 @@ namespace real_estate.Controllers
     [Authorize(Roles ="Employee,Admin")]
     public class ContractController : Controller
     {
-        real_estateDB db;
-        public ContractController(real_estateDB _db)
+        private readonly IContractRepo contractRepo;
+        private readonly PropertyRepo propertyRepo;
+        private readonly EmployeeRepo employeeRepo;
+
+        public ContractController(IContractRepo _contractRepo , PropertyRepo _propertyRepo,EmployeeRepo _employeeRepo)
         {
-            db = _db;
+            contractRepo = _contractRepo;
+            propertyRepo = _propertyRepo;
+            employeeRepo = _employeeRepo;
         }
         public IActionResult Index()
         {
-            var contracts = db.Contracts.Include(x => x.property).ThenInclude(x=>x.propertyStatus).Include(x => x.employee).Include(x => x.client).ToList();
+            var contracts = contractRepo.GetAll();
             return View(contracts);
         }
 
 
         public IActionResult New()
         {
-            ViewData["Properties"] = db.Properties.Where(x => x.contract == null).ToList();
-            ViewData["Employees"] = db.Employees.ToList();
-            ViewData["Clients"] = db.Clients.ToList();
+            ViewData["Properties"] = propertyRepo.GetPropertiesNotHaveContract();
+            ViewData["Employees"] = employeeRepo.GetAll();
+            ViewData["Clients"] =   contractRepo.GetAllClients();
             return View();
         }
 
@@ -44,18 +52,19 @@ namespace real_estate.Controllers
                     StartDate = contractVM.StartDate,
                     EndDate = contractVM.EndDate
                 };
-                db.Contracts.Add(contract);
-                db.SaveChanges();
-                var prop = db.Properties.Where(x => x.Id == contractVM.PropertyId).FirstOrDefault();
+                contractRepo.Add(contract);
+                contractRepo.Save();
+                var prop = propertyRepo.GetById(contractVM.PropertyId);
+                           //db.Properties.Where(x => x.Id == contractVM.PropertyId).FirstOrDefault();
                 prop.ContractId = contract.Id;
-                db.SaveChanges();
+                contractRepo.Save();
                 return RedirectToAction("Index");
             }
             else
             {
-                ViewData["Properties"] = db.Properties.Where(x => x.contract == null).ToList();
-                ViewData["Employees"] = db.Employees.ToList();
-                ViewData["Clients"] = db.Clients.ToList();
+                ViewData["Properties"] =  propertyRepo.GetPropertiesNotHaveContract();
+                ViewData["Employees"] =  employeeRepo.GetAll();
+                ViewData["Clients"] =   contractRepo.GetAllClients();
                 return View("New");
             }
 
@@ -64,23 +73,23 @@ namespace real_estate.Controllers
 
         public IActionResult Edit(int id)
         {
-            var propertiesNotHaveContract= db.Properties.Where(x => x.contract == null).ToList();
-            var contrac = db.Contracts.Include(x=>x.property).Include(c=>c.employee).Include(x=>x.employee).FirstOrDefault(x => x.Id == id);
-            var propertyEdit = db.Properties.Where(x => x.Id == contrac.propertyId).FirstOrDefault();
+            var propertiesNotHaveContract = propertyRepo.GetPropertiesNotHaveContract();
+            var contrac = contractRepo.GetById(id);
+            var propertyEdit = propertyRepo.GetById((int)contrac.propertyId);
             propertiesNotHaveContract.Add(propertyEdit);
             
 
             ViewData["Properties"] = propertiesNotHaveContract;
-            ViewData["Employees"] = db.Employees.ToList();
-            ViewData["Clients"] = db.Clients.ToList();
-            var contract = db.Contracts.Include(x=>x.property).Include(x=>x.client).Include(x=>x.employee).SingleOrDefault(x => x.Id == id);
+            ViewData["Employees"] = employeeRepo.GetAll();
+            ViewData["Clients"] = contractRepo.GetAllClients();
+            var contract = contractRepo.GetById(id);
             return View("New", contract);
         }
 
         [HttpPost]
         public IActionResult Edit(ContractViewModel contractVM)
         {
-            var contract2 = db.Contracts.Include(x => x.property).Include(x => x.client).Include(x => x.employee).SingleOrDefault(x => x.Id == contractVM.Id);
+            var contract2 = contractRepo.GetById(contractVM.Id);
             if (ModelState.IsValid)
             {
                 Contract contract = new Contract()
@@ -93,8 +102,8 @@ namespace real_estate.Controllers
                     EndDate = contractVM.EndDate
                 };
 
-                db.Contracts.Update(contract);
-                db.SaveChanges();
+                contractRepo.Edit(contract);
+                contractRepo.Save();
                 return RedirectToAction("Index");
             }
             else
@@ -108,9 +117,9 @@ namespace real_estate.Controllers
                     StartDate = contractVM.StartDate,
                     EndDate = contractVM.EndDate
                 };
-                ViewData["Properties"] = db.Properties.ToList();
-                ViewData["Employees"] = db.Employees.ToList();
-                ViewData["Clients"] = db.Clients.ToList();
+                ViewData["Properties"] =  propertyRepo.GetPropertiesNotHaveContract();
+                ViewData["Employees"] =  employeeRepo.GetAll();
+                ViewData["Clients"] = contractRepo.GetAllClients();
 
                 return View("New", contract);
             }
@@ -119,16 +128,16 @@ namespace real_estate.Controllers
 
         public IActionResult Details(int id)
         {
-            var contract = db.Contracts.Include(x => x.property).ThenInclude(x=>x.city).Include(x => x.employee).Include(x => x.client).FirstOrDefault(x => x.Id == id);
+            var contract = contractRepo.GetById(id);
             return View(contract);
 
         }
         public IActionResult Delete(int id)
         {
-            var contract = db.Contracts.FirstOrDefault(x => x.Id == id);
+            var contract = contractRepo.GetById(id);
 
-            db.Contracts.Remove(contract);
-            db.SaveChanges();
+            contractRepo.Delete(contract);
+            contractRepo.Save();
             return RedirectToAction("Index");
 
 

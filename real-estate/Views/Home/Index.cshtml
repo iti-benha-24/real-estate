@@ -1,16 +1,145 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
+
+
 }
+
 
 <div class="text-center">
     <h1 class="display-4">Welcome To Our Website </h1><br>
     <p> <a class="display-5" style="text-decoration:none" asp-controller="Properity" asp-action="index">Easy Way to Find a Perfect Property</a>.</p><br><br>
 </div>
 
-
-<div class="search-container">
+<p>
+    @* <div class="search-container">
     <input type="text" placeholder="Search...">
     <a href="/Properity/index" class="btn btn-primary"><i class="fa fa-search"></i></a>
 
+    </div>
+    *@
+    @* <div class="container">
+    <form action="/" method="post">
+
+    <div>
+    <select name="" asp-items="@ViewBag.Cities"></select>
+    </div>
+    <div>
+    <select name="" asp-items="@ViewBag.Status"></select>
+    </div>
+    <div>
+    <select name="" asp-items="@ViewBag.Types"></select>
+    </div>
+    </form>
+    </div> *@
+</p>
+
+<div class="container">
+    <form method="post" id="filterForm">
+        <div class="row">
+            <div class="col">
+                <select id="cityId" class="form-select" name="cityId" asp-items="@ViewBag.Cities">
+                    <option value="0">City</option>
+                </select>
+                
+            </div>
+            <div class="col">
+                <select id="statusId" class="form-select" name="statusId" asp-items="@ViewBag.Status">
+                    <option value="0">Status</option>
+                </select>
+            </div>
+            <div class="col">
+                <select id="typeId" class="form-select" name="typeId" asp-items="@ViewBag.Types">
+                    <option value="0">Type</option>
+                </select>
+            </div>
+            <div class="col">
+                <button id="search" type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+
 </div>
-<br><br><br><br><br><br>
+<div class="container my-5">
+    <div id="propertyContainer" class="row">
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+ 
+    <script>
+        $(document).ready(function () {
+            $('#filterForm').submit(function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var cityId = $('#cityId').val(); // Get selected cityId
+                var statusId = $('#statusId').val(); // Get selected statusId
+                var typeId = $('#typeId').val(); // Get selected typeId
+               
+                $.ajax({
+                    url: `/Home/Filter`, // Adjust the URL to match your controller and action method
+                    type: 'POST', // Assuming you want to use POST method
+                    data: { cityId: cityId, statusId: statusId, typeId: typeId },
+                    dataType: 'json',
+                    success: function (data) {
+                        // Handle the response data here
+                       // console.log(data);
+
+                        $('#propertyContainer').empty();
+
+                        // Append property cards for each property in the response
+                        $.each(data, function (index, property) {
+                            var propertyCard = `
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <img src="${property.propertyImg}" class="card-img-top" alt="Property Image" style="height: 200px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Location: ${property.address}</h5>
+                                            <p class="card-text">Price: ${property.price}</p>
+                                            <p class="card-text">city: ${property.city.name}</p>
+                                            <p class="card-text">Features: ${property.features}</p>
+                                            <div class="btn-group d-flex" role="group" aria-label="Property Actions">
+                                                <a class="mr-2 btn btn-primary" href="/Properity/Details/${property.id}">Details</a>
+                                                <a id="ed-${property.id}" class="mr-2 btn btn-outline-primary" href="/Properity/Edit/${property.id}" hidden>Edit</a>
+                                                <a id="del-${property.id}" class="mr-2 btn btn-dark" href="/Properity/Delete/${property.id}" hidden> Delete </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            $('#propertyContainer').append(propertyCard);
+                            $.ajax({
+                                url: '/Home/CheckUserRole',
+                                type: 'GET',
+                                success: function (response) {
+                                    // Handle success response
+                                    if (response.isAdminOrEmployee) {
+                                        document.getElementById('ed-' + property.id).removeAttribute("hidden");
+                                        document.getElementById('del-' + property.id).removeAttribute("hidden");
+                                        
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    // Handle error
+                                    console.log("eroro here");
+                                }
+
+                            
+                            });
+                        });
+
+
+                     },
+                     error: function (xhr, status, error) {
+                        // Handle errors here
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        
+
+                });
+    </script>
+}
